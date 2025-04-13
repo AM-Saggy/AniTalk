@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME</title>
+    <style>
+        body {
+            background-color: rgba(44, 62, 80, 0.945);
+            color: #ffffff; /* White text for better contrast */
+            font-family: 'Arial', sans-serif; /* Modern and clean font */
+        }
+        .panel{
+            display: flex;
+            align-items: center; 
+            gap: 40px;
+            font-size: 15px;
+            font-family: sans-serif;
+        }
+        .panel h1{
+            color: #00ccff;
+        }
+        .panel a{
+            color: #ffffff;
+            text-decoration: none;
+            font-size: larger;
+            text-shadow: 2px 2px 15px black;
+        }
+        .panel a:hover{
+            color: #00ccff;
+        }
+        .search_container {
+            display: flex; 
+            gap: 10px;
+            background-color: white;
+            border-radius: 5px;
+            align-items: center; /* Align items vertically */
+        }
+        .searchbar {
+            float: left;
+            display: flex;
+            padding: 10px;
+            border: none;
+            outline: none;
+            width: 300px;
+        }
+        .searchbutton {
+            background-image: url('./images/search.png'); /* Ensure the path is correct */
+            background-color: white; /* Fallback background color */
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            border: none;
+            border-radius: 5px; /* Rounded corners to blend with the search bar */
+            height: 40px;
+            width: 40px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .control {
+            background-color: rgba(44, 62, 80, 0.945); /* Match the background color */
+            border: none;
+            border-radius: 5px; /* Rounded corners */
+            height: 40px;
+            width: 40px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: none; /* Remove any shadow */
+            opacity: 0.8; /* Slight transparency to blend better */
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            position: relative;
+        }
+
+        .control:hover {
+            opacity: 1; /* Fully visible on hover */
+            transform: scale(1.1); /* Slight zoom effect */
+        }
+
+        .control::before,
+        .control::after,
+        .control span {
+            content: '';
+            display: block;
+            background-color: white; /* Bar color */
+            height: 3px;
+            width: 20px;
+            position: absolute;
+            transition: transform 0.3s ease;
+        }
+
+        .control::before {
+            top: 10px;
+        }
+
+        .control::after {
+            bottom: 10px;
+        }
+
+        .control span {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .login_container {
+            margin: 50px;
+        }
+        .login {
+            background-color:rgba(44, 62, 80, 0.945); /* Semi-transparent black */
+            color: #ffffff; /* White text */
+            cursor: pointer;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px; /* Rounded corners */
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        .login:hover {
+            transform: translateY(-5px);    
+        }
+        .blog_container {
+            background-color: rgba(0, 0, 0, 0.5); 
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .blog_container > div {
+            margin-bottom: 20px; /* Add spacing between blogs */
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Add a subtle border */
+            border-radius: 10px; /* Rounded corners for each blog */
+            background-color: rgba(44, 62, 80, 0.8); /* Background for each blog */
+        }
+
+        .blog_container > div:last-child {
+            margin-bottom: 0; /* Remove margin for the last blog */
+        }
+
+        .blog_container h3 {
+            color: #00ccff;
+        }
+
+        .blog_container p {
+            text-align: justify;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .button_container{
+            display: flex;
+            gap: 8px;
+            float: right;
+            margin: auto;
+        }
+        .up, .down {
+            cursor: pointer;
+            overflow: hidden;
+            box-sizing: border-box;
+            border-radius: 50%;
+            border: none;
+            width: 35px; 
+            height: 35px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            background-color: rgba(44, 62, 80, 0.945); 
+            background-blend-mode: multiply; 
+            transition: transform 0.3s ease;
+        }
+        .up {
+            background-image: url('/images/up1.png'); /* Default up image */
+        }
+        .down {
+            background-image: url('/images/down1.png'); /* Default down image */
+        }
+        .up.clicked {
+            background-image: url('/images/up1_clicked.png'); /* Change to clicked image for up */
+        }
+        .down.clicked {
+            background-image: url('/images/down1_clicked.png'); /* Change to clicked image for down */
+        }
+        .up:hover, .down:hover {
+            transform: scale(1.1); 
+            background-color: rgba(44, 62, 80, 0.8);
+        }
+        /* Modal styles */
+        .modal, .modal1 {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+            background-color: rgba(255, 255, 255, 0.733);
+        }
+        .modal-content input[type="text"], .modal-content input[type="password"] {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 90%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.5);
+            outline: none;
+        }
+        .modal-content button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .modal-content button:hover {
+            background-color: #0056b3;
+        }
+        .close {
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            cursor: pointer;
+            float: right;
+        }.modal-content h2{
+            color: #007BFF;
+            text-align: center;
+            margin-left: 45px;
+            margin-bottom: 15px;
+        }.modal-content p{
+            text-shadow: 2px 2px 15px black;
+        }
+        .login_container {
+            position: absolute; 
+            top: 30px; 
+            right: 10px; 
+            margin: 0; 
+        }
+        /* Updated styles for the menu modal */
+        #menuModal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0; /* Position the menu on the left */
+            width: 18%; /* Take 25% of the screen width */
+            height: 100%; /* Full height */
+            background-color: rgba(44, 62, 80, 0.945); /* Semi-transparent background */
+            z-index: 1000;
+            padding: 1px 10px;
+            overflow-y: auto; /* Enable scrolling if content overflows */
+        }
+
+        .menu-content {
+            padding: 20px;
+            text-align: left; /* Align all text to the left */
+            color: white; /* Set text color to white */
+        }
+
+        .menu-content span,
+        .menu-content table {
+            display: block;
+            margin: 10px 0;
+        }
+        .menu-content table caption{
+            text-align: left;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        .menu-content table td{
+            padding: 5px 5px;
+            font-size: small;
+        }
+        .menu-content .close {
+            float: left;
+            background-color: rgba(44, 62, 80, 0.945);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .menu-content .close:hover {
+            border: 2px solid rgb(32, 45, 58);
+        }
+
+        .menu-content a {
+            color: white; /* Ensure links are white */
+            text-decoration: none;
+        }
+
+        .menu-content a:hover {
+            color: #00ccff; /* Highlight links on hover */
+        }.menu-content span .community{
+            background-color: #00ccff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 10px;
+            cursor: pointer;
+            width: 200px;
+            height: 30px;
+            transition: transform 0.3s ease;
+        }.menu-content span .community:hover{
+            transform: translateY(-5px);
+        }
+        .infinite-scroll {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .scrolling-content {
+            display: inline-block;
+            animation: scroll 40s linear infinite; /* Slower animation for smoother scrolling */
+        }
+
+        .scrolling-content span img {
+            width: 300px; /* Increased width */
+            height: 150px; /* Increased height */
+            object-fit: cover; /* Ensure the image fits within the dimensions */
+            margin: 0 15px; /* Add spacing between images */
+            border-radius: 10px; /* Optional: Add rounded corners */
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%); /* Move by half the content width */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <button class="control" onclick="openMenu()">
+            <span></span>
+        </button>
+        <h1>AniTalk</h1>
+        <div class="search_container">
+            <form action="">
+                <input type="text" placeholder="Search Blog" class="searchbar">
+            </form>
+            <button class="searchbutton"></button>
+        </div>
+        <a href="">Anime</a>
+        <a href="">Manga</a>
+        <a href="">Community</a>
+        <a href="">Help</a>
+        <div class="login_container">
+            <button class="login" onclick="openModal()">Log In</button>
+        </div>
+    </div>
+
+    <div class="infinite-scroll">
+        <div class="scrolling-content">
+            <!-- Original content -->
+            <span><img src="/images/onepiece.jpg" alt="one piece"></span>
+            <span><img src="/images/bluelock.jpg" alt="bluelock"></span>
+            <span><img src="/images/demon slayer.jpg" alt="demon slayer"></span>
+            <span><img src="/images/mha.jpg" alt="mha"></span>
+            <span><img src="/images/naruto.jpg" alt="naruto"></span>
+            <span><img src="/images/sololevelling.jpg" alt="solo levelling"></span>
+            <span><img src="/images/blackclover.jpg" alt=""></span>
+            <span><img src="/images/apothecary.jpg" alt=""></span>
+            <span><img src="/images/free.jpg" alt=""></span>
+            <span><img src="/images/frieren.jpg" alt=""></span>
+            <span><img src="/images/vinland.jpg" alt=""></span>
+            
+            <!-- Duplicate content for seamless looping -->
+            <span><img src="/images/onepiece.jpg" alt="one piece"></span>
+            <span><img src="/images/bluelock.jpg" alt="bluelock"></span>
+            <span><img src="/images/demon slayer.jpg" alt="demon slayer"></span>
+            <span><img src="/images/mha.jpg" alt="mha"></span>
+            <span><img src="/images/naruto.jpg" alt="naruto"></span>
+            <span><img src="/images/sololevelling.jpg" alt="solo levelling"></span>
+            <span><img src="/images/blackclover.jpg" alt=""></span>
+            <span><img src="/images/apothecary.jpg" alt=""></span>
+            <span><img src="/images/free.jpg" alt=""></span>
+            <span><img src="/images/frieren.jpg" alt=""></span>
+            <span><img src="/images/vinland.jpg" alt=""></span>
+        </div>
+    </div>
+
+    <div class="blog_container">
+        <div class="blog1">
+            <div class="button_container">
+                <button class="up"></button>
+                <span class="upvote-count">0</span> <!-- Counter for upvotes -->
+                <button class="down"></button>
+                <span class="downvote-count">0</span> <!-- Counter for downvotes -->
+            </div>
+            <h3>#AOT</h3>
+            <h3>@<u>Animelover1</u></h3>
+            <p>I am a fan of action anime. The best action anime in my opinion is Attack On Titan. It just doesn't contain action but also a good plot. The character development is also good. I strongly recommend it to others who like action anime.</p>
+        </div>
+        <div class="blog2">
+            <div class="button_container">
+                <button class="up"></button>
+                <span class="upvote-count">0</span> <!-- Counter for upvotes -->
+                <button class="down"></button>
+                <span class="downvote-count">0</span> <!-- Counter for downvotes -->
+            </div>
+            <h3>#Naruto</h3>
+            <h3>@<u>Madara_Uchia22</u></h3>
+            <p>Naruto is one of the most inspiring anime I have ever watched. The story of a boy who never gives up on his dreams is truly motivational. Highly recommended for fans of adventure and action.</p>
+        </div>
+        <div class="blog3">
+            <div class="button_container">
+                <button class="up"></button>
+                <span class="upvote-count">0</span> <!-- Counter for upvotes -->
+                <button class="down"></button>
+                <span class="downvote-count">0</span> <!-- Counter for downvotes -->
+            </div>
+            <h3>#OnePiece</h3>
+            <h3>@<u>Deku31</u></h3>
+            <p>One Piece is a masterpiece. The world-building, character development, and emotional storytelling are unmatched. If you love adventure and epic journeys, this is a must-watch.</p>
+        </div>
+        <div class="blog4">
+            <div class="button_container">
+                <button class="up"></button>
+                <span class="upvote-count">0</span> <!-- Counter for upvotes -->
+                <button class="down"></button>
+                <span class="downvote-count">0</span> <!-- Counter for downvotes -->
+            </div>
+            <h3>#DemonSlayer</h3>
+            <h3>@<u>Ichigo112</u></h3>
+            <p>Demon Slayer has some of the best animation and fight scenes in anime history. The story of Tanjiro and Nezuko is heartwarming and action-packed. A must-watch for anime fans.</p>
+        </div>
+        <div class="blog5">
+            <div class="button_container">
+                <button class="up"></button>
+                <span class="upvote-count">0</span> <!-- Counter for upvotes -->
+                <button class="down"></button>
+                <span class="downvote-count">0</span> <!-- Counter for downvotes -->
+            </div>
+            <h3>#MyHeroAcademia</h3>
+            <h3>@<u>HeroFan</u></h3>
+            <p>My Hero Academia is a fantastic anime about aspiring heroes. The characters are relatable, and the action scenes are thrilling. Perfect for fans of superhero stories.</p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal()">X</button>
+            <h2>Login</h2>
+            <input type="text" placeholder="Username">
+            <input type="password" placeholder="Password">
+            <button onclick="openModal1()">Submit</button>
+        </div>
+    </div>
+
+    <div class="modal1" id="welcomeModal">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal1(), closeModal()">X</button>
+            <h2>Welcome Back</h2>
+            <p>We had missed you a lot.</p>
+        </div>
+    </div>
+
+    <div id="menuModal" class="modal">
+        <div class="menu-content">
+            <span class="close" onclick="closeMenu()">⬅ Close Menu</span>
+            <span><button class="community">Community</button></span>
+            <span><a href="">Home</a></span>
+            <span><a href="">Anime</a></span>
+            <span><a href="">Manga</a></span>
+            <span><a href="">Movies</a></span>
+            <span><a href="">Most Popular</a></span>
+            <span><a href="">Trending</a></span>
+            <span><a href="">Specials</a></span>
+            <span><a href="">News</a></span>
+            <span><a href="">Events</a></span>
+            <table>
+                <caption>Genre</caption>
+                <tr>
+                    <td><a href="">Action</a></td>
+                    <td><a href="">Adventure</a></td>
+                </tr>
+                <tr>
+                    <td><a href="">Comedy</a></td>
+                    <td><a href="">Drama</a></td>
+                </tr>
+                <tr>
+                    <td><a href="">Fantasy</a></td>
+                    <td><a href="">Horror</a></td>
+                </tr>
+                <tr>
+                    <td><a href="">Mystery</a></td>
+                    <td><a href="">Romance</a></td>
+                </tr>
+                <tr>
+                    <td><a href="">Sci-Fi</a></td>
+                    <td><a href="">Slice of Life</a></td>
+                </tr>
+                <tr>
+                    <td><a href="">Sports</a></td>
+                    <td><a href="">Thriller</a></td>
+                </tr>
+                <tr>
+                    <td><a href="">Supernatural</a></td>
+                    <td><a href="">Historical</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script src="script_index.js"></script>
+</body>
+</html>
+``` 
+
+
